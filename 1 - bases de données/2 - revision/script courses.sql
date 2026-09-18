@@ -1,28 +1,6 @@
-/*==============================================================*/
-/* DBMS name:      MySQL 5.0                                    */
-/* Created on:     18/09/2026 15:46:20                          */
-/*==============================================================*/
-
-
-drop table if exists ACCUEIL;
-
-drop table if exists CATEGORIE;
-
-drop table if exists CHAMPS;
-
-drop table if exists CHEVAL;
-
-drop table if exists COURSE;
-
-drop table if exists JOCKEY;
-
-drop table if exists PARENT;
-
-drop table if exists PARTICIPE;
-
-drop table if exists PROPRIETAIRE;
-
-drop table if exists SAISON;
+drop database if exists courses201;
+create database if not exists courses201 collate utf8mb4_general_ci;
+use courses201;
 
 /*==============================================================*/
 /* Table: ACCUEIL                                               */
@@ -169,3 +147,100 @@ alter table PARTICIPE add constraint FK_PARTICIPE3 foreign key (ID_JOCKEY)
 alter table SAISON add constraint FK_ORGANISER foreign key (ID_COURSE)
       references COURSE (ID_COURSE) on delete restrict on update restrict;
 
+
+-- Insertion des Propriétaires
+INSERT INTO PROPRIETAIRE (ID_PROPRIETAIRE, NOM_PRORIETAIRE, PRENOM_PROPRIETAIRE) VALUES
+(1, 'Dupont', 'Jean'),
+(2, 'Martin', 'Claire'),
+(3, 'Bernard', 'Luc'),
+(4, 'Thomas', 'Sophie'),
+(5, 'Petit', 'Marc');
+
+-- Insertion des Chevaux (10 chevaux)
+INSERT INTO CHEVAL (ID_CHEVAL, ID_PROPRIETAIRE, NOM_CHEVAL, DATE_NAISSANCE, SEXE) VALUES
+(1, 1, 'Éclair', '2018-05-12', 'M'),
+(2, 1, 'Tonnerre', '2019-03-15', 'M'),
+(3, 2, 'Storm', '2017-07-22', 'F'),
+(4, 2, 'Vitesse', '2018-09-10', 'F'),
+(5, 3, 'Spirit', '2020-01-05', 'M'),
+(6, 3, 'Galant', '2019-11-18', 'M'),
+(7, 4, 'Bora', '2017-04-30', 'F'),
+(8, 4, 'Comète', '2018-08-14', 'F'),
+(9, 5, 'Zephyr', '2019-06-25', 'M'),
+(10, 5, 'Fuego', '2020-02-11', 'M');
+
+-- Insertion des Champs de courses
+INSERT INTO CHAMPS (ID_CHAMP, NOM_CHAMP, NB_PLACES) VALUES
+(1, 'Hippodrome de Longchamp', 12),
+(2, 'Hippodrome de Chantilly', 10),
+(3, 'Hippodrome de Deauville', 8);
+
+-- Insertion des Catégories
+INSERT INTO CATEGORIE (ID_CATEGORIE, LIBELLE_CATEGORIE) VALUES
+(1, 'Galop - Groupe I'),
+(2, 'Galop - Groupe II'),
+(3, 'Obstacle');
+
+-- Association Accueil (Champs / Catégories)
+INSERT INTO ACCUEIL (ID_CHAMP, ID_CATEGORIE) VALUES
+(1, 1),
+(1, 2),
+(2, 2),
+(2, 3),
+(3, 1);
+
+-- Insertion des Courses (5 courses)
+INSERT INTO COURSE (ID_COURSE, ID_CHAMP, ID_CATEGORIE, DESIGNATION) VALUES
+(1, 1, 1, 'Grand Prix de Paris'),
+(2, 1, 2, 'Prix du Printemps'),
+(3, 2, 2, 'Derby de Chantilly'),
+(4, 2, 3, 'Grand Steeple-Chase'),
+(5, 3, 1, 'Prix de la Côte Fleurie');
+
+-- Insertion des Saisons (20 saisons réparties sur les 5 courses)
+INSERT INTO SAISON (ID_SAISON, ID_COURSE, DATE_COURSE, DOTATION) VALUES
+(1, 1, '2024-06-15 14:00:00', 150000.00),
+(2, 1, '2025-06-14 14:00:00', 160000.00),
+(3, 1, '2026-06-13 14:00:00', 175000.00),
+(4, 2, '2024-04-10 15:30:00', 80000.00),
+(5, 2, '2025-04-09 15:30:00', 85000.00),
+(6, 2, '2026-04-08 15:30:00', 90000.00),
+(7, 3, '2024-07-20 16:00:00', 120000.00),
+(8, 3, '2025-07-19 16:00:00', 125000.00),
+(9, 3, '2026-07-18 16:00:00', 130000.00),
+(10, 4, '2024-05-05 13:30:00', 200000.00),
+(11, 4, '2025-05-04 13:30:00', 210000.00),
+(12, 4, '2026-05-03 13:30:00', 220000.00),
+(13, 5, '2024-08-25 17:00:00', 100000.00),
+(14, 5, '2025-08-24 17:00:00', 105000.00),
+(15, 5, '2026-08-23 17:00:00', 110000.00),
+(16, 1, '2023-06-17 14:00:00', 140000.00),
+(17, 2, '2023-04-12 15:30:00', 75000.00),
+(18, 3, '2023-07-22 16:00:00', 115000.00),
+(19, 4, '2023-05-07 13:30:00', 190000.00),
+(20, 5, '2023-08-27 17:00:00', 95000.00);
+
+-- Insertion des Jockeys
+INSERT INTO JOCKEY (ID_JOCKEY, NOM_JOCKEY, PRENOM_JOCKEY) VALUES
+(1, 'Moreau', 'Antoine'),
+(2, 'Lefevre', 'Julien'),
+(3, 'Roussel', 'Thomas'),
+(4, 'Guerin', 'David');
+
+-- Insertion des Participations (Liaison Cheval - Saison - Jockey)
+INSERT INTO PARTICIPE (ID_CHEVAL, ID_SAISON, ID_JOCKEY, CLASSEMENT) VALUES
+(1, 1, 1, 1),
+(2, 1, 2, 2),
+(3, 1, 3, 3),
+(4, 2, 1, 1),
+(5, 2, 4, 2),
+(6, 3, 2, 1),
+(7, 4, 3, 1),
+(8, 5, 1, 2),
+(9, 6, 4, 1),
+(10, 7, 2, 1);
+
+-- Insertion des Relations Parents (Généalogie optionnelle)
+INSERT INTO PARENT (ID_CHEVAL, CHE_ID_CHEVAL) VALUES
+(3, 1),
+(4, 2);
