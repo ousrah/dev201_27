@@ -244,3 +244,69 @@ INSERT INTO PARTICIPE (ID_CHEVAL, ID_SAISON, ID_JOCKEY, CLASSEMENT) VALUES
 INSERT INTO PARENT (ID_CHEVAL, CHE_ID_CHEVAL) VALUES
 (3, 1),
 (4, 2);
+
+
+#1.	la liste de tous les cheveaux.
+
+select * from cheval;
+
+
+#2.	la listes de champs qui peuvent acceuillir la catégorie "Galop - Groupe I"
+select nom_champ
+from champs
+join accueil using(id_champ)
+join categorie using(id_categorie)
+where libelle_categorie="Galop - Groupe I";
+
+
+select nom_champ 
+from champs 
+where id_champ in (select id_champ 
+					from accueil 
+                    where id_categorie in (select id_categorie 
+											from categorie 
+                                            where libelle_categorie = 'Galop - Groupe I')
+					);
+
+
+#3.	la liste des cheveaux qui participent a la course "Grand Prix de paris" de l'edition 'Juin 2024' triés par classement
+
+select nom_cheval, classement
+from cheval
+join participe using(id_cheval)
+join saison using(id_saison)
+join course using(id_course)
+where designation like "Grand Prix de paris"
+and year(date_course)=2024
+and month(date_course)=6
+#and date_course  like "2024-06%"
+order by classement;
+
+#4.	la liste des jockeys qui ont monté le cheval "Éclair" 
+#durant tout son historique
+
+select NOM_JOCKEY 
+from jockey
+join participe using (ID_JOCKEY)
+join cheval using (id_cheval)
+where NOM_CHEVAL like "Éclair" ;
+
+#5.	Le cheval qui a remporté le plus grand nombre de compétitions
+with Nombre_victoir as (select id_cheval , count(*) as nb_vct from participe 
+						where CLASSEMENT = 1
+                        group by ID_CHEVAL),
+	 Nombre_victoir_max as (select max(nb_vct) nb_vct_max from Nombre_victoir)
+select NOM_CHEVAL,DATE_NAISSANCE,SEXE from cheval 
+join Nombre_victoir  NV using (id_cheval)
+join Nombre_victoir_max NVM on NVM.nb_vct_max=NV.nb_vct;
+
+select * from participe;
+
+
+#6.	Les parents du cheval qui a remporté le plus grand nombre de compétitions
+
+
+
+#7.	Le montant total remporté par Idao de Tillard dans toutes les compétitions qu'il a remporté
+#8.	La catégorie que le cheval Idao de Tillardremporte le plus
+
