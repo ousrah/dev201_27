@@ -220,6 +220,27 @@ si A = 0 et B = 0 alors  x = l''ensemble R
 si A = 0 et B <> 0 alors x = impossible
 si A <> 0 alors x = -B/A
 
+drop function if exists premier;
+delimiter $$
+create function premier(a int, b int)
+	returns varchar(150)
+    deterministic
+begin 
+	if a = 0  then
+		if b = 0 then
+			return "l'ensemble R";
+		else
+    		return "impossible";
+		end if;
+	else 
+		return round(-b/a,2);
+	end if;
+end $$
+delimiter ;
+select premier (2,3);
+
+
+
 
 
 #exercice 2
