@@ -1,37 +1,17 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     18/09/2026 15:46:20                          */
+/* Created on:     19/09/2026 09:56:56                          */
 /*==============================================================*/
 
-
-drop table if exists ACCUEIL;
-
-drop table if exists CATEGORIE;
-
-drop table if exists CHAMPS;
-
-drop table if exists CHEVAL;
-
-drop table if exists COURSE;
-
-drop table if exists JOCKEY;
-
-drop table if exists PARENT;
-
-drop table if exists PARTICIPE;
-
-drop table if exists PROPRIETAIRE;
-
-drop table if exists SAISON;
 
 /*==============================================================*/
 /* Table: ACCUEIL                                               */
 /*==============================================================*/
 create table ACCUEIL
 (
-   ID_CHAMP             int not null,
    ID_CATEGORIE         int not null,
-   primary key (ID_CHAMP, ID_CATEGORIE)
+   ID_CHAMPS            int not null,
+   primary key (ID_CATEGORIE, ID_CHAMPS)
 );
 
 /*==============================================================*/
@@ -49,10 +29,10 @@ create table CATEGORIE
 /*==============================================================*/
 create table CHAMPS
 (
-   ID_CHAMP             int not null auto_increment,
-   NOM_CHAMP            varchar(50),
-   NB_PLACES            int,
-   primary key (ID_CHAMP)
+   ID_CHAMPS            int not null auto_increment,
+   NOM_CHAMPS           varchar(50),
+   NB_PLACES            bigint,
+   primary key (ID_CHAMPS)
 );
 
 /*==============================================================*/
@@ -63,8 +43,8 @@ create table CHEVAL
    ID_CHEVAL            int not null auto_increment,
    ID_PROPRIETAIRE      int not null,
    NOM_CHEVAL           varchar(50),
+   SEXE_CHEVALE         char(1),
    DATE_NAISSANCE       date,
-   SEXE                 char(1),
    primary key (ID_CHEVAL)
 );
 
@@ -74,8 +54,8 @@ create table CHEVAL
 create table COURSE
 (
    ID_COURSE            int not null auto_increment,
-   ID_CHAMP             int not null,
    ID_CATEGORIE         int not null,
+   ID_CHAMPS            int not null,
    DESIGNATION          varchar(50),
    primary key (ID_COURSE)
 );
@@ -106,11 +86,11 @@ create table PARENT
 /*==============================================================*/
 create table PARTICIPE
 (
-   ID_CHEVAL            int not null,
-   ID_SAISON            int not null,
    ID_JOCKEY            int not null,
+   ID_SAISON            int not null,
+   ID_CHEVAL            int not null,
    CLASSEMENT           int,
-   primary key (ID_CHEVAL, ID_SAISON, ID_JOCKEY)
+   primary key (ID_JOCKEY, ID_SAISON, ID_CHEVAL)
 );
 
 /*==============================================================*/
@@ -119,7 +99,7 @@ create table PARTICIPE
 create table PROPRIETAIRE
 (
    ID_PROPRIETAIRE      int not null auto_increment,
-   NOM_PRORIETAIRE      varchar(50),
+   NOM_PROPRIETAIRE     varchar(50),
    PRENOM_PROPRIETAIRE  varchar(50),
    primary key (ID_PROPRIETAIRE)
 );
@@ -136,20 +116,20 @@ create table SAISON
    primary key (ID_SAISON)
 );
 
-alter table ACCUEIL add constraint FK_ACCUEIL foreign key (ID_CHAMP)
-      references CHAMPS (ID_CHAMP) on delete restrict on update restrict;
-
-alter table ACCUEIL add constraint FK_ACCUEIL2 foreign key (ID_CATEGORIE)
+alter table ACCUEIL add constraint FK_ACCUEIL foreign key (ID_CATEGORIE)
       references CATEGORIE (ID_CATEGORIE) on delete restrict on update restrict;
 
-alter table CHEVAL add constraint FK_POSSEDE foreign key (ID_PROPRIETAIRE)
+alter table ACCUEIL add constraint FK_ACCUEIL2 foreign key (ID_CHAMPS)
+      references CHAMPS (ID_CHAMPS) on delete restrict on update restrict;
+
+alter table CHEVAL add constraint FK_POSEDE foreign key (ID_PROPRIETAIRE)
       references PROPRIETAIRE (ID_PROPRIETAIRE) on delete restrict on update restrict;
 
 alter table COURSE add constraint FK_APPARTIENT foreign key (ID_CATEGORIE)
       references CATEGORIE (ID_CATEGORIE) on delete restrict on update restrict;
 
-alter table COURSE add constraint FK_SE_DEROULE foreign key (ID_CHAMP)
-      references CHAMPS (ID_CHAMP) on delete restrict on update restrict;
+alter table COURSE add constraint FK_SE_DEROULE foreign key (ID_CHAMPS)
+      references CHAMPS (ID_CHAMPS) on delete restrict on update restrict;
 
 alter table PARENT add constraint FK_PARENT foreign key (ID_CHEVAL)
       references CHEVAL (ID_CHEVAL) on delete restrict on update restrict;
@@ -157,15 +137,15 @@ alter table PARENT add constraint FK_PARENT foreign key (ID_CHEVAL)
 alter table PARENT add constraint FK_PARENT2 foreign key (CHE_ID_CHEVAL)
       references CHEVAL (ID_CHEVAL) on delete restrict on update restrict;
 
-alter table PARTICIPE add constraint FK_PARTICIPE foreign key (ID_CHEVAL)
-      references CHEVAL (ID_CHEVAL) on delete restrict on update restrict;
+alter table PARTICIPE add constraint FK_PARTICIPE foreign key (ID_JOCKEY)
+      references JOCKEY (ID_JOCKEY) on delete restrict on update restrict;
 
 alter table PARTICIPE add constraint FK_PARTICIPE2 foreign key (ID_SAISON)
       references SAISON (ID_SAISON) on delete restrict on update restrict;
 
-alter table PARTICIPE add constraint FK_PARTICIPE3 foreign key (ID_JOCKEY)
-      references JOCKEY (ID_JOCKEY) on delete restrict on update restrict;
+alter table PARTICIPE add constraint FK_PARTICIPE3 foreign key (ID_CHEVAL)
+      references CHEVAL (ID_CHEVAL) on delete restrict on update restrict;
 
-alter table SAISON add constraint FK_ORGANISER foreign key (ID_COURSE)
+alter table SAISON add constraint FK_ORAGNISER foreign key (ID_COURSE)
       references COURSE (ID_COURSE) on delete restrict on update restrict;
 

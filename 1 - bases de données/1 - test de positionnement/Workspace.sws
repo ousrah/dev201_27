@@ -10,7 +10,9 @@
 		<Model Expanded="Yes" ID="{E6DB9000-55F6-4D84-873E-E4F6C0412849}" Loaded="No" Name="ConceptualDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="../../../dev202_27/1 - bases de données/1 . test de positionnement/ConceptualDataModel_1.pdm"/>
 		<Model Expanded="Yes" ID="{4FB84D2A-5A27-45AA-8EDC-ED08D97F7BF8}" Loaded="No" Name="vod" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="vod.pdm"/>
 		<Model Expanded="Yes" ID="{C2ED7E7E-07DC-491A-9138-7605DC66146B}" Name="ConceptualDataModel_1" Type="{1E597170-9350-11D1-AB3C-0020AF71E433}" URL="../2 - revision/courses.cdm"/>
-		<Model Expanded="Yes" ID="{BE6BCDF1-F655-4CF8-B7E5-0235866BCB17}" Name="courses" Selected="Yes" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="../2 - revision/courses.pdm"/>
+		<Model Expanded="Yes" ID="{BE6BCDF1-F655-4CF8-B7E5-0235866BCB17}" Name="courses" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="../2 - revision/courses.pdm"/>
+		<Model Expanded="Yes" ID="{32786429-6FAA-417B-8F1A-265CD3C551C7}" Name="courses" Type="{FF4B6538-9856-42CF-B9B9-304ED370CEAA}" URL="../2 - revision/courses/courses.prj"/>
+		<Model Expanded="Yes" ID="{36042C52-3104-4B9E-80CA-C1BFF7D09A2B}" Name="courses" Type="{FF4B6538-9856-42CF-B9B9-304ED370CEAA}" URL="../../../dev202_27/1 - bases de données/2 - revision/courses/courses.prj"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
 </Workspace>
