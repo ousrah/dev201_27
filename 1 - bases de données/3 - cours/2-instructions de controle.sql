@@ -569,3 +569,36 @@ select somme_n_entiers(4);
 
 #exercice : ecrire un fonction qui calcule le factoriel d'un entier
 
+drop function if exists facto_n_entiers;
+delimiter $$
+create function facto_n_entiers(n int)
+	returns bigint
+    deterministic
+begin
+	declare facto bigint default 1;
+    declare i int default 1;
+	while i<=n do
+		set facto = facto * i;
+		set i = i+1;
+	end while;
+		return facto;
+end $$
+delimiter ;
+select facto_n_entiers(0);
+select facto_n_entiers(1);
+select facto_n_entiers(5);
+
+
+
+#declare a int;
+set @a = 1;
+select @a;
+
+set @a=8;
+select @a;
+
+
+ 
+
+
+
