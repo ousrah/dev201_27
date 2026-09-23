@@ -433,4 +433,139 @@ select num_jour(2);
 # si note entre 18 et <=20 excellent
 # si note non inclus entre 0 et 20 erreur
 
+drop function if exists mention;
+delimiter $$
+create function mention(note float)
+	returns varchar(150)
+    deterministic
+begin
+	declare mention varchar(150);
+    case 
+		when note>=0 and note<5 then set mention = "très faible";
+		when note>=5 and note<9 then set mention = "faible";
+		when note>=9 and note<10 then set mention = "insuffisant";
+		when note>=10 and note<12 then set mention = "passable";
+		when note>=12 and note<14 then set mention = "assez bien";
+		when note>=14 and note<16 then set mention = "bien";
+		when note>=16 and note<18 then set mention = "très bien";
+        when note>=18 and note<20 then set mention = "excellent";
+    else
+		set mention = "erreur";
+	end case;
+    return mention;
+end $$
+delimiter ;
+
+
+
+
+
+drop function if exists mention;
+delimiter $$
+create function mention(note float)
+	returns varchar(150)
+    deterministic
+begin
+   return 
+   case 
+		when note<0 then "erreur"
+		when note<5 then "très faible"
+		when note<9 then  "faible"
+		when note<10 then  "insuffisant"
+		when note<12 then "passable"
+		when note<14 then  "assez bien"
+		when note<16 then  "bien"
+		when note<18 then "très bien"
+        when note<20 then "excellent"
+    else
+		 "erreur"
+	end ;
+
+end $$
+delimiter ;
+
+select mention(-5);
+select mention(1);
+select mention(8);
+select mention(9);
+select mention(10);
+select mention(12);
+select mention(14);
+select mention(16);
+select mention(18);
+select mention(180);
+
+
+# les boucles
+
+
+
+drop function if exists somme_n_entiers;
+delimiter $$
+create function somme_n_entiers(n int)
+	returns bigint
+    deterministic
+begin
+	declare somme bigint default 0; #declaration et initialisation
+    declare i int default 1;
+    # declare a,b int;  exemple de declaration de deux variable de meme type en meme temps
+    while i<=n do
+		set somme = somme + i;
+        set i = i+1;
+    end while;
+	return somme;
+end $$
+delimiter ;
+
+
+
+
+drop function if exists somme_n_entiers;
+delimiter $$
+create function somme_n_entiers(n int)
+	returns bigint
+    deterministic
+begin
+	declare somme bigint default 0; #declaration et initialisation
+    declare i int default 1;
+    # declare a,b int;  exemple de declaration de deux variable de meme type en meme temps
+    repeat
+		set somme = somme + i;
+        set i = i+1;
+    until i>n end repeat;
+	return somme;
+end $$
+delimiter ;
+
+
+
+
+
+drop function if exists somme_n_entiers;
+delimiter $$
+create function somme_n_entiers(n int)
+	returns bigint
+    deterministic
+begin
+	declare somme bigint default 0; #declaration et initialisation
+    declare i int default 1;
+    boucle1:loop
+		set somme = somme + i;
+        set i = i+1;
+        if i>n then
+			leave boucle1;
+        end if;
+    end loop boucle1;
+	return somme;
+end $$
+delimiter ;
+
+
+
+
+
+select somme_n_entiers(4);
+
+
+#exercice : ecrire un fonction qui calcule le factoriel d'un entier
 
