@@ -3,10 +3,17 @@
 #Produit (NumProduit, libelle, PU, stock)
 
 
+<<<<<<< HEAD
 drop database if exists produits_202;
 
 create database produits_202 collate utf8mb4_general_ci;
 use produits_202;
+=======
+drop database if exists produits_201;
+
+create database produits_201 collate utf8mb4_general_ci;
+use produits_201;
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 
 create table Produit(
 numProduit int auto_increment primary key,
@@ -40,7 +47,15 @@ begin
 	select * from produit;
 end$$
 delimiter ;
+<<<<<<< HEAD
 call ex1_q1();
+=======
+
+call ex1_q1();
+
+
+
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 #2.	Ecrire une procédure stockée qui affiche les libellés des produits 
 #dont le stock est inférieur à 10 ;
 
@@ -49,17 +64,26 @@ drop procedure if exists ex1_q2;
 delimiter $$
 create procedure if not exists ex1_q2()
 begin
+<<<<<<< HEAD
 	select libelle from produit where stock < 10;
 end$$
 delimiter ;
 call ex1_q2();
 
+=======
+	select libelle from produit where stock<10;
+end$$
+delimiter ;
+
+call ex1_q2();
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 
 
 
 #3.	Ecrire une PS qui admet en paramètre un numéro de produit et affiche 
 #un message contenant le libellé, le prix et la quantité en stock équivalents,
 # si l’utilisateur passe une valeur lors de l’exécution de la procédure ;
+<<<<<<< HEAD
 select * from produit;
 drop procedure if exists ex1_q3;
 delimiter $$
@@ -81,14 +105,37 @@ end$$
 delimiter ;
 call ex1_q3();
 
+=======
+
+
+drop procedure if exists ex1_q3;
+delimiter $$
+create procedure if not exists ex1_q3(id int)
+begin
+	if (select count(*) from produit where numproduit=id)=0 then
+		select 'aucun produit';
+    else
+		select concat('libelle = ',libelle, ' pu = ' , pu  , ' stock = ', stock) as produits from produit where numproduit = id;
+	end if;
+end$$
+delimiter ;
+
+call ex1_q3(2);
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 
 
 #4.	Ecrire une PS qui permet de supprimer un produit en passant son numéro 
 #comme paramètre ;
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 drop procedure if exists ex1_q4;
 delimiter $$
 create procedure if not exists ex1_q4(id int)
 begin
+<<<<<<< HEAD
 	if (select count(*) from produit where numproduit=id) =0 then
 		select "ce produit nexiste pas" as message;
 	else
@@ -98,6 +145,19 @@ begin
 end$$
 delimiter ;
 call ex1_q4(2);
+=======
+	if (select count(*) from produit where numproduit=id)=0 then
+		select 'aucun produit';
+    else
+		delete from produit where numproduit = id;
+        select 'produit supprimé avec succès';
+	end if;
+end$$
+delimiter ;
+
+call ex1_q4(3);
+select * from produit;
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 
 #Exercice 2 :
 #Ecrire une PS qui permet de mettre à jour le stock après une opération 
@@ -106,6 +166,7 @@ call ex1_q4(2);
 #a.	Opération impossible : si la quantité est supérieure au stock de l’article ;
 #b.	Besoin de réapprovisionnement si stock-quantité < 10
 #c.	Opération effectuée  avec succès, la nouvelle valeur du stock est (afficher la nouvelle valeur) ;
+<<<<<<< HEAD
 drop procedure if exists ex2;
 delimiter &&
 create procedure ex2(num int,q int)
@@ -131,6 +192,33 @@ select * from produit;
 call ex2(4,8);        
 			
 		
+=======
+
+
+
+drop procedure if exists ex2;
+delimiter $$
+create procedure if not exists ex2(id int,qte int)
+begin
+	declare stk int;
+    declare reponse varchar(150) default "operation effectuée avec succès";
+    select stock into stk from produit where numproduit = id;
+    if qte>stk then
+		select 'operation impossible';
+    else
+		update produit set stock = stock-qte where numproduit = id;
+        if stk-qte<10 then
+			set reponse = concat(reponse, ' - ','besoin de reaprovisionnement');
+        end if;
+        select reponse;
+	end if;
+   
+end$$
+delimiter ;
+
+call ex2(4,10);
+select * from produit;
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 
 
 
@@ -138,6 +226,7 @@ call ex2(4,8);
 #Ecrire une PS qui retourne le prix moyen des produits (utiliser un paramètre OUTPUT) 
 #; Exécuter la PS ;
 
+<<<<<<< HEAD
 drop procedure if exists ex3;
 delimiter &&
 create procedure ex3(out r float)
@@ -149,11 +238,27 @@ delimiter ;
 
 call ex3(@r);   
 select @r;
+=======
+
+
+drop procedure if exists ex3;
+delimiter $$
+create procedure if not exists ex3(out moyenne float)
+begin
+	select avg(pu) into moyenne from produit;
+end$$
+delimiter ;
+
+call ex3(@m);
+select @m;
+
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 
 #Exercice 4 :
 #Créer une procédure stockée qui accepte comme paramètre un entier et retourne 
 #le factoriel de ce nombre.
 
+<<<<<<< HEAD
 drop procedure if exists ex4;
 delimiter &&
 create procedure ex4(in n float,out f int )
@@ -175,6 +280,27 @@ select @f;
 
 
 
+=======
+
+
+drop procedure if exists ex4;
+delimiter $$
+create procedure if not exists ex4(n int, out f bigint)
+begin
+	declare i int default 1;
+    set f = 1;
+    while i<=n do
+		set f = f*i;
+        set i=i+1;
+    end while;    
+end$$
+delimiter ;
+
+call ex4(0,@f);
+select @f;
+
+
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 #Exercice 5 :
 #1.	Créer une procédure stockée qui accepte les paramètres suivants : 
 #a.	 2 paramètres de type entier  
@@ -182,6 +308,7 @@ select @f;
 #c.	1 paramètre output de type entier
 #La procédure doit enregistrer le résultat de calcul entre les deux nombres
 # selon l’opérateur passé dans le troisième paramètre (+,-,%,/,*). 
+<<<<<<< HEAD
 drop procedure if exists ex5;
 delimiter &&
 create procedure ex5( a float, b float ,c char , out r varchar(50))
@@ -208,6 +335,43 @@ delimiter ;
 call ex5(1,0,'#',@r);
 select @r;
    
+=======
+
+
+
+
+drop procedure if exists ex5;
+delimiter $$
+create procedure if not exists ex5(a float, b float, op char, out r varchar(50))
+begin
+	case op
+		when '+' then set r = a+b;
+		when '-' then set r = a-b;
+		when '*' then set r = a*b;
+		when '%' then 
+			if b=0 then
+				set r = "impossible de diviser par zero";
+            else    
+				set r = a%b;
+			end if;
+      
+        
+        when '/' then 
+			if b=0 then
+				set r = "impossible de diviser par zero";
+            else    
+				set r = a/b;
+			end if;
+        else
+			set r = 'erreur';
+	end case;    
+    
+end$$
+delimiter ;
+
+call ex5(3,0,'*',@f);
+select @f;
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 
 
 
@@ -223,9 +387,15 @@ select @r;
 
 
 
+<<<<<<< HEAD
 drop database if exists cuisine_202;
 create database cuisine_202;
 use cuisine_202;
+=======
+drop database if exists cuisine_201;
+create database cuisine_201;
+use cuisine_201;
+>>>>>>> 0cc58630d35df27cf0fb7f804424ea137bf8a5dc
 create table Recettes (
 NumRec int auto_increment primary key, 
 NomRec varchar(50), 
