@@ -14,12 +14,20 @@ create view v_t1 as select vol.* from vol join pilote on vol.numpil = pilote.num
 				  join avion on vol.numav = avion.numav;
 
 
+drop view v_t1;
+
 select * from v_t1;
+
+
 select count(*) from v_t1;
 
 #les tables temporaires
 create temporary table tva (id int auto_increment primary key, nom varchar(50), valeur double);
 insert into tva (nom, valeur) values ('normal', '0.20'),('reduire',0.07),('services',0.14);
+
+select * from tva;
+
+
 create temporary table tva2025 (id int auto_increment primary key, nom varchar(50), valeur double);
 insert into tva2025 (nom, valeur) values ('normal', '0.19'),('reduire',0.09),('services',0.16);
 
