@@ -71,23 +71,41 @@ db.dblp.aggregate([varMatch,varSort,varproject]);
 
 // 9.   Compter le nombre de ses publications ;
 use("DBLP");
+db.dblp.find({"authors":"Toru Ishida"}).count();
+
+use("DBLP");
+db.dblp.aggregate([{$match:{"authors":"Toru Ishida"}},
+    {$group:{'_id':null,'total':{$sum:1}}}])
 
 
-
-
+    use("DBLP");
+db.dblp.aggregate([{$match:{"authors":"Toru Ishida"}},
+    {$count:'authors'}])
 
 // 10.  Compter le nombre de publications part type 
 // depuis 2011 ype ;
 use("DBLP");
+varmatch=({$match:{"year":{$gte:2011}}})
+vargroup=({$group:{"_id":"$type","total":{$sum:1}}})
+db.dblp.aggregate([varmatch,vargroup])
 
-
-
-// 11.  Donnez pour chaque type le nombre des ouvrages 
+// 11.  Donnez pour chaque type le nombre des ouvrage 
 // edités depuis 2011, n’affichez que ceux qui dépassent 1000 
 use("DBLP");
-
-
+db.dblp.aggregate([
+    {$match:{"year":{$gte:2011}}},
+    {$group:{"_id":"$type","total":{$sum:1}}},
+    {$match:{"total":{$gt:1000}}}
+]);
 
 // 12.  Compter le nombre de publications par auteur et 
 // trier le résultat par ordre croissant ;
 use("DBLP");
+db.dblp.aggregate([
+    {$unwind:"$authors"},
+    {$group:{"_id":"$authors","total":{$sum:1}}},
+    {$sort: {
+      "total": 1
+    }}
+    
+])
